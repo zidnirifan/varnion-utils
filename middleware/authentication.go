@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/varnion-rnd/utils/authentication"
 	"github.com/varnion-rnd/utils/tools"
 )
 
@@ -30,6 +31,17 @@ func Authentication() gin.HandlerFunc {
 		}
 
 		// Logic Authentication
+		claims, err := tools.ValidateAccessToken(tokenString)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, tools.Response{
+				Status:  "Unauthorized",
+				Message: "Invalid or expired token",
+			})
+			return
+		}
+
+		// Store claims in context
+		c.Set(authentication.UserIDKey, claims.UserID.String())
 
 		// Validate Success
 		c.Next()
