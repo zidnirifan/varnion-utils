@@ -10,12 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
-	"github.com/varnion-rnd/utils/elastic"
-	"github.com/varnion-rnd/utils/influx"
-	mongoPing "github.com/varnion-rnd/utils/mongo"
-	"github.com/varnion-rnd/utils/mysql"
-	"github.com/varnion-rnd/utils/postgres"
-	redisPing "github.com/varnion-rnd/utils/redis"
+	"github.com/zidnirifan/varnion-utils/elastic"
+	"github.com/zidnirifan/varnion-utils/influx"
+	mongoPing "github.com/zidnirifan/varnion-utils/mongo"
+	"github.com/zidnirifan/varnion-utils/mysql"
+	"github.com/zidnirifan/varnion-utils/postgres"
+	redisPing "github.com/zidnirifan/varnion-utils/redis"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

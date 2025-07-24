@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/varnion-rnd/utils/request/action"
+	"github.com/zidnirifan/varnion-utils/request/action"
 )
 
 var (
