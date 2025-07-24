@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/varnion-rnd/utils/authentication"
-	"github.com/varnion-rnd/utils/tools"
+	"github.com/zidnirifan/varnion-utils/authentication"
+	"github.com/zidnirifan/varnion-utils/tools"
 )
 
 func Authentication() gin.HandlerFunc {
