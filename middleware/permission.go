@@ -1,10 +1,63 @@
 package middleware
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
 
-func Permission() gin.HandlerFunc {
+	"github.com/gin-gonic/gin"
+	"github.com/varnion-rnd/utils/tools"
+)
+
+func Permission(app, menu, permission string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Logic Permission
+		permissionHeader := c.GetHeader("Permission-Token")
+		if permissionHeader == "" {
+			c.AbortWithStatusJSON(http.StatusForbidden, tools.Response{
+				Status:  "Forbidden",
+				Message: "Permission token is required",
+			})
+			return
+		}
+
+		permissionClaim, err := tools.ValidatePermissionToken(permissionHeader)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusForbidden, tools.Response{
+				Status:  "Forbidden",
+				Message: "Invalid or expired permission token",
+			})
+			return
+		}
+
+		// Check if the required app, menu, and permission exist in the claims
+		hasPermission := false
+		for _, permToken := range permissionClaim.Data {
+			if permToken.AppName == app {
+				for _, menuItem := range permToken.Menus {
+					if menuItem.MenuName == menu {
+						for _, perm := range menuItem.Permission {
+							if perm != nil && *perm == permission {
+								hasPermission = true
+								break
+							}
+						}
+						if hasPermission {
+							break
+						}
+					}
+				}
+				if hasPermission {
+					break
+				}
+			}
+		}
+
+		if !hasPermission {
+			c.AbortWithStatusJSON(http.StatusForbidden, tools.Response{
+				Status:  "Forbidden",
+				Message: "Insufficient permissions for this resource",
+			})
+			return
+		}
 
 		// Validate Success
 		c.Next()
