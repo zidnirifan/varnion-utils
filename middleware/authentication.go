@@ -11,22 +11,33 @@ import (
 
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.GetHeader("Authorization")
-
-		parts := strings.Fields(tokenString)
-		if tokenString == "" {
-			c.JSON(http.StatusUnauthorized, tools.Response{
-				Message: "Token is missing",
+		// Get Authorization header
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, tools.Response{
+				Status:  "Unauthorized",
+				Message: "Authorization header is required",
 			})
-			c.Abort()
 			return
 		}
 
-		if len(parts) < 2 {
-			c.JSON(http.StatusUnauthorized, tools.Response{
-				Message: "Token is missing",
+		// Check and extract Bearer token
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, tools.Response{
+				Status:  "Unauthorized",
+				Message: "Invalid Authorization header format",
 			})
-			c.Abort()
+			return
+		}
+
+		// Check if token exists
+		tokenString := parts[1]
+		if tokenString == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, tools.Response{
+				Status:  "Unauthorized",
+				Message: "Token cannot be empty",
+			})
 			return
 		}
 

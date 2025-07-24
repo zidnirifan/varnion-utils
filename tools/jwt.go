@@ -2,6 +2,7 @@ package tools
 
 import (
 	"errors"
+	"os"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -17,7 +18,7 @@ type Claims struct {
 
 func ValidateAccessToken(tokenString string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		secret := authentication.ACCESS_SECRET_KEY
+		secret := os.Getenv(authentication.ACCESS_SECRET_KEY)
 		return []byte(secret), nil
 	})
 	if err != nil {
