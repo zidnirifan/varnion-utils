@@ -5,8 +5,8 @@ import (
 	"runtime"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zidnirifan/varnion-utils/logger"
-	"github.com/zidnirifan/varnion-utils/tools"
+	"github.com/varnion-rnd/utils/logger"
+	"github.com/varnion-rnd/utils/tools"
 )
 
 func HandleError(c *gin.Context, code int, err error) {

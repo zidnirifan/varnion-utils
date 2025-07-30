@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zidnirifan/varnion-utils/permission"
-	"github.com/zidnirifan/varnion-utils/tools"
+	"github.com/varnion-rnd/utils/permission"
+	"github.com/varnion-rnd/utils/tools"
 )
 
 func Permission(app, menu, permission string) gin.HandlerFunc {

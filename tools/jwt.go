@@ -7,8 +7,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 
-	"github.com/zidnirifan/varnion-utils/authentication"
-	"github.com/zidnirifan/varnion-utils/permission"
+	"github.com/varnion-rnd/utils/authentication"
+	"github.com/varnion-rnd/utils/permission"
 )
 
 type Claims struct {

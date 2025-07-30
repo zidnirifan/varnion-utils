@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"github.com/zidnirifan/varnion-utils/logger"
+	"github.com/varnion-rnd/utils/logger"
 )
 
 type RequestConfig struct {
