@@ -15,3 +15,9 @@ const (
 	Delete     = "delete"
 	DeleteBulk = "delete_bulk"
 )
+
+type BulkPayload struct {
+	App        string
+	Menu       string
+	Permission string
+}
