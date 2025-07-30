@@ -25,7 +25,16 @@ type ResponseResult struct {
 	Headers    http.Header
 }
 
-func DoRequestWithLog(client *http.Client, cfg RequestConfig) (*ResponseResult, error) {
+func DoRequestWithLog(cfg RequestConfig) (*ResponseResult, error) {
+	timeout := 5 * time.Second
+	if cfg.TimeoutSec > 0 {
+		timeout = time.Duration(cfg.TimeoutSec) * time.Second
+	}
+
+	client := &http.Client{
+		Timeout: timeout,
+	}
+
 	start := time.Now()
 
 	req, err := http.NewRequest(cfg.Method, cfg.URL, bytes.NewBuffer(cfg.Body))
