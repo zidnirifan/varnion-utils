@@ -23,6 +23,11 @@ var conn net.Conn
 var Log *logrus.Logger
 var ApiRequestLog *logrus.Logger
 
+func init() {
+	initLogger()
+	initApiRequestLogger()
+}
+
 func initLogstash() error {
 	if conn != nil {
 		return nil
@@ -46,7 +51,7 @@ func initLogstash() error {
 	return nil
 }
 
-func InitLogger() *logrus.Logger {
+func initLogger() {
 	Log = logrus.New()
 
 	if os.Getenv(LOG_USE_LOGSTASH) == "true" {
@@ -73,11 +78,9 @@ func InitLogger() *logrus.Logger {
 		Log.Fatalf("Failed to parse log level: %v", err)
 	}
 	Log.SetLevel(level)
-
-	return Log
 }
 
-func InitApiRequestLogger() {
+func initApiRequestLogger() {
 	ApiRequestLog = logrus.New()
 
 	if os.Getenv(LOG_API_USE_LOGSTASH) == "true" {
