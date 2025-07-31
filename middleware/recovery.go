@@ -1,7 +1,29 @@
 package middleware
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"net/http"
+	"runtime/debug"
+
+	"github.com/gin-gonic/gin"
+	"github.com/varnion-rnd/utils/logger"
+	"github.com/varnion-rnd/utils/tools"
+)
 
 func Recovery() gin.HandlerFunc {
-	return gin.Recovery()
+	return func(c *gin.Context) {
+		defer func() {
+			if r := recover(); r != nil {
+				err := fmt.Errorf("%v", r)
+
+				logger.Log.WithError(err).WithField("stack", string(debug.Stack())).Errorf("panic recovered: %v", r)
+
+				c.AbortWithStatusJSON(http.StatusInternalServerError, tools.Response{
+					Status:  "error",
+					Message: "Internal Server Error",
+				})
+			}
+		}()
+		c.Next()
+	}
 }
