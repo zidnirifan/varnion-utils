@@ -9,10 +9,16 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
+	"os"
 )
 
 // command to generate a 32-byte key and pepper:
 // openssl rand -hex 32
+
+var (
+	AES_SECRET string = "AES_SECRET"
+	AES_PEPPER string = "AES_PEPPER"
+)
 
 type Crypto interface {
 	Encrypt(plainText string) ([]byte, error)
@@ -26,7 +32,10 @@ type AES256Crypto struct {
 	nonceSize int
 }
 
-func NewAES256Crypto(key string, pepper string) Crypto {
+func NewAES256Crypto() Crypto {
+	key := os.Getenv(AES_SECRET)
+	pepper := os.Getenv(AES_PEPPER)
+
 	bKey, err := hex.DecodeString(key)
 	if err != nil {
 		panic(err)
