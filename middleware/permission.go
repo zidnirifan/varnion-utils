@@ -4,12 +4,20 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/varnion-rnd/utils/authentication"
 	"github.com/varnion-rnd/utils/permission"
 	"github.com/varnion-rnd/utils/tools"
 )
 
 func Permission(app, menu, permission string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		isFromInternal := c.GetBool(authentication.IsFromInternalKey)
+		if isFromInternal {
+			// If request is from internal, skip permission check
+			c.Next()
+			return
+		}
+
 		// Logic Permission
 		permissionHeader := c.GetHeader("Permission-Token")
 		if permissionHeader == "" {
@@ -67,6 +75,13 @@ func Permission(app, menu, permission string) gin.HandlerFunc {
 
 func PermissionBulk(payload []permission.BulkPayload) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		isFromInternal := c.GetBool(authentication.IsFromInternalKey)
+		if isFromInternal {
+			// If request is from internal, skip permission check
+			c.Next()
+			return
+		}
+
 		// Logic Permission
 		permissionHeader := c.GetHeader("Permission-Token")
 		if permissionHeader == "" {

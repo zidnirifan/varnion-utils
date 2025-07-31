@@ -11,6 +11,23 @@ import (
 
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// validate internal token if exist
+		internalToken := c.GetHeader("X-Internal-Token")
+		if internalToken != "" {
+			_, err := tools.ValidateInternalToken(internalToken)
+			if err != nil {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, tools.Response{
+					Status:  "Unauthorized",
+					Message: "Invalid or expired internal token",
+				})
+				return
+			}
+
+			c.Set(authentication.IsFromInternalKey, true)
+			c.Next()
+			return
+		}
+
 		// Get Authorization header
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
